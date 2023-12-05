@@ -1,0 +1,22 @@
+{
+  "compilerOptions": {
+    "target": "es2016",
+    "lib": ["es6"],
+    "module": "commonjs",
+    "rootDir": ".",
+    "resolveJsonModule": true,
+    "outDir": "build",
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "strict": true,
+    "noImplicitAny": true,
+    "skipLibCheck": true,
+    "typeRoots": ["node_modules/@types"],
+    "types": [ "node", "jest" ],
+  },
+  "exclude": [],
+  "include": [
+    "src/**/*.ts",
+    "tests/*.ts"
+  ]
+}
