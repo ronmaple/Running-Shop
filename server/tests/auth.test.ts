@@ -97,7 +97,7 @@ describe('auth.test.ts', () => {
       completed: false,
     }
     try {
-      await axios.post('/notes', params, {
+      await axios.post('/products', params, {
         headers: {
           Cookie: 'jwt=wrong',
         },
