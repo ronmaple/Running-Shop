@@ -4,7 +4,7 @@ import cookieParser from 'cookie-parser'
 import cors from 'cors'
 
 import healthRoute from './health/routes'
-import notesRoute from './notes/routes'
+import productRoute from './product/routes'
 import authRoutes from './auth/routes'
 import { rateLimit } from './ratelimit/middlewares'
 import { authenticate } from './auth/middlewares'
@@ -18,7 +18,7 @@ app.use(cookieParser())
 app.use(cors())
 
 app.use('/', healthRoute)
-app.use('/notes', rateLimit, authenticate, notesRoute)
+app.use('/products', rateLimit, authenticate, productRoute)
 app.use('/auth', authRoutes)
 
 // TODO: winston or another logger

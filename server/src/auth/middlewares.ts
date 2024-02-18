@@ -1,6 +1,6 @@
 import jwt from 'jsonwebtoken'
 import { jwtSecret } from './config'
-import { Roles } from './model'
+import { Roles } from '../user/model'
 import { Request, Response, NextFunction } from 'express'
 
 export const authenticate = (
