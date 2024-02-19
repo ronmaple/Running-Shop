@@ -9,7 +9,7 @@ describe('auth.test.ts', () => {
     await axios.delete('/auth/purge')
   })
 
-  it.only('should create a user on POST /auth/signup', async () => {
+  it('should create a user on POST /auth/signup', async () => {
     const params = {
       firstName: 'Ronald',
       lastName: 'McDonald',

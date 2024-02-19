@@ -21,6 +21,8 @@ app.use('/', healthRoute)
 app.use('/products', rateLimit, authenticate, productRoute)
 app.use('/auth', authRoutes)
 
+app.use('/static', express.static('s3/public'))
+
 // TODO: winston or another logger
 const server = async () => {
   try {
