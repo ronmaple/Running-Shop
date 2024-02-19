@@ -20,18 +20,20 @@ export const get: RequestHandler = async (req, res) => {
   }
 }
 
+// todo: pagination, generic response handler
 export const search: RequestHandler = async (req, res) => {
   const query = req.query.q
   try {
-    // alternatively, either pull all the products if no filter, or add filter if provided
+    let data
     if (!query) {
+      data = await products.find()
+    } else {
+      data = await products.find({ body: { $regex: query } })
+    }
+    if (!data || !data.length) {
       return res.status(404).send('Not Found')
     }
-    const results = await products.find({ body: { $regex: query } })
-    if (!results || !results.length) {
-      return res.status(404).send('Not Found')
-    }
-    res.send({ data: results })
+    res.send({ data })
   } catch (err) {
     // TODO generic error handler
     console.error(err)
