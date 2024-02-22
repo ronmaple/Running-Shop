@@ -1,18 +1,48 @@
 import mongoose, { Schema } from 'mongoose'
 
-const productSchema = new Schema({
-  author: String, // TODO: Link to an ID of a user
-  // accessControl: {} // TODO: add access control
-  body: String,
-  date: {
-    type: Date,
-    default: Date.now,
+export interface Product {
+  id?: string
+  title: string
+  description?: string
+  unitPrice: number
+  salePrice: number
+  inventory?: number
+  images: string[]
+}
+
+const productSchema = new Schema(
+  {
+    id: String,
+    title: {
+      type: String,
+      required: true,
+    },
+    description: {
+      type: String,
+      require: false,
+    },
+    unitPrice: {
+      type: Number,
+      required: true,
+    },
+    salePrice: {
+      type: Number,
+      required: true,
+    },
+    // TODO possibly add inventory location at some point
+    inventory: {
+      type: Number,
+      default: 0,
+    },
+    images: [String],
+
+    // Todo: product categories
+    // Todo: distinguish between unit price and price to sell
   },
-  completed: {
-    type: Boolean,
-    default: false,
-  },
-})
+  {
+    timestamps: true,
+  }
+)
 
 const product = mongoose.model('product', productSchema)
 
