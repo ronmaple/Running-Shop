@@ -81,6 +81,8 @@ Work in progress:
 35. 404 not found page
 36. set up frontend environment variables
 37. set up prices on product page
+38. protect main branch (main <- release <- develop)
+39. set up pagination in backend
 
 
 #### Task details
