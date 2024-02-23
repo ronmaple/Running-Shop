@@ -18,7 +18,11 @@ app.use(cookieParser())
 app.use(cors())
 
 app.use('/', healthRoute)
-app.use('/products', rateLimit, authenticate, productRoute)
+// TODO revise this. authenticate and rateLimit via route
+// ie: GET is OK for public, CUD/ for admins
+// app.use('/products', rateLimit, authenticate, productRoute)
+
+app.use('/products', productRoute)
 app.use('/auth', authRoutes)
 
 app.use('/static', express.static('s3/public'))

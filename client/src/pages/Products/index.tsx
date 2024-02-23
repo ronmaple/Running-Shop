@@ -1,15 +1,15 @@
 import { useEffect, useState } from 'react'
-import { shoes } from '../../../../server/seeders/products'
 import {
-  Button,
+  // Button,
   Card,
-  CardActions,
+  // CardActions,
   CardContent,
   CardMedia,
   Container,
   Grid,
   Typography,
 } from '@mui/material'
+import { formatPrice } from '../../utils/numberFormatter'
 
 export type Product = {
   id: string
@@ -89,9 +89,12 @@ const Products = (props) => {
                       }}
                       image={`http://localhost:3000/static/${product.images[0]}`}
                     />
-                    <CardContent sx={{ flexGrow: 1 }}>
-                      <Typography gutterBottom variant="h5" component="h2">
+                    <CardContent sx={{ flexGrow: 3 }}>
+                      <Typography variant="h6" component="h6">
                         {product.title}
+                      </Typography>
+                      <Typography variant="subtitle1">
+                        {formatPrice(product.salePrice)}
                       </Typography>
                     </CardContent>
                   </Card>
