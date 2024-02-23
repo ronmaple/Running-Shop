@@ -20,7 +20,8 @@ export const get: RequestHandler = async (req, res) => {
   }
 }
 
-// todo: pagination, generic response handler
+// todo: pagination, generic response handler {data, total, cursor}
+// todo: Response Interface
 export const search: RequestHandler = async (req, res) => {
   const query = req.query.q
   try {
@@ -33,7 +34,7 @@ export const search: RequestHandler = async (req, res) => {
     if (!data || !data.length) {
       return res.status(404).send('Not Found')
     }
-    res.send({ data })
+    res.send({ data, total: data.length, cursor: null })
   } catch (err) {
     // TODO generic error handler
     console.error(err)
