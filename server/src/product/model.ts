@@ -40,7 +40,15 @@ const productSchema = new Schema(
     // Todo: distinguish between unit price and price to sell
   },
   {
+    // todo: standardize time formats
     timestamps: true,
+    toJSON: {
+      transform: function (doc, ret) {
+        ret.id = ret._id.toString() // Convert _id to string and assign to id
+        delete ret._id // Remove _id field
+        delete ret.__v // Optional: Remove __v field if you don't need it
+      },
+    },
   }
 )
 

@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import {
   // Button,
   Card,
+  CardActionArea,
   // CardActions,
   CardContent,
   CardMedia,
@@ -10,6 +11,8 @@ import {
   Typography,
 } from '@mui/material'
 import { formatPrice } from '../../utils/numberFormatter'
+import { useNavigate } from 'react-router-dom'
+import { formatImageUrl } from '../../utils/formatImageUrl'
 
 export type Product = {
   id: string
@@ -42,14 +45,16 @@ const getProducts = async () => {
 // TODO:
 // 1. environment variable for url
 const Products = (props) => {
+  const navigate = useNavigate()
   const [products, setProducts] = useState<ProductResponse>({
     data: [],
     total: 0,
     cursor: null,
   })
-  const [loading, setLoading] = useState<boolean>(false)
+  const [loading, setLoading] = useState<boolean>(true)
   const [error, setError] = useState<Error>()
 
+  // TODO this render twice.
   useEffect(() => {
     // todo make this better
     setLoading(true)
@@ -63,6 +68,11 @@ const Products = (props) => {
       })
     setLoading(false)
   }, [])
+
+  const handleClick = (productId) => {
+    console.log({ productId })
+    navigate(`/products/${productId}`)
+  }
 
   return (
     <div>
@@ -81,22 +91,24 @@ const Products = (props) => {
                       flexDirection: 'column',
                     }}
                   >
-                    <CardMedia
-                      component="div"
-                      sx={{
-                        // 4:3
-                        pt: '75%',
-                      }}
-                      image={`http://localhost:3000/static/${product.images[0]}`}
-                    />
-                    <CardContent sx={{ flexGrow: 3 }}>
-                      <Typography variant="h6" component="h6">
-                        {product.title}
-                      </Typography>
-                      <Typography variant="subtitle1">
-                        {formatPrice(product.salePrice)}
-                      </Typography>
-                    </CardContent>
+                    <CardActionArea onClick={() => handleClick(product.id)}>
+                      <CardMedia
+                        component="div"
+                        sx={{
+                          // 4:3
+                          pt: '75%',
+                        }}
+                        image={formatImageUrl(product.images[0])}
+                      />
+                      <CardContent sx={{ flexGrow: 3 }}>
+                        <Typography variant="h6" component="h6">
+                          {product.title}
+                        </Typography>
+                        <Typography variant="subtitle1">
+                          {formatPrice(product.salePrice)}
+                        </Typography>
+                      </CardContent>
+                    </CardActionArea>
                   </Card>
                 </Grid>
               ))}
