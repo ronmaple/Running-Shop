@@ -44,9 +44,9 @@ const productSchema = new Schema(
     timestamps: true,
     toJSON: {
       transform: function (doc, ret) {
-        ret.id = ret._id.toString() // Convert _id to string and assign to id
-        delete ret._id // Remove _id field
-        delete ret.__v // Optional: Remove __v field if you don't need it
+        ret.id = ret._id.toString()
+        delete ret._id
+        delete ret.__v
       },
     },
   }
