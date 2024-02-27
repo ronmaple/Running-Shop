@@ -19,6 +19,10 @@ export const register: RequestHandler = async (req, res) => {
     if (existingUser) {
       throw new Error('email already taken')
     }
+    // Not overdoing it here. Will need to add actual validation (ticket#74)
+    if (body.password !== body.reenterPassword) {
+      throw new Error('Signup Error')
+    }
 
     const hashedPassword = await bcrypt.hash(body.password, saltRounds)
     const user = await User.create({
@@ -33,6 +37,9 @@ export const register: RequestHandler = async (req, res) => {
     console.log(err)
     if (err.message === 'email already taken') {
       return res.status(409).send({ message: err.message })
+    }
+    if (err.message === 'Signup Error') {
+      return res.status(422).send({ message: 'Signup Error' })
     }
     return res.send(500)
   }
