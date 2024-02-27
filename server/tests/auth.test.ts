@@ -15,6 +15,7 @@ describe('auth.test.ts', () => {
       lastName: 'McDonald',
       email: 'test@example.com',
       password: 'mysecret',
+      reenterPassword: 'mysecret',
     }
     const response = await axios.post('/auth/signup', params)
     expect(response.status).toEqual(200)
@@ -27,6 +28,7 @@ describe('auth.test.ts', () => {
       lastName: 'McDonald',
       email: 'test@example.com',
       password: 'mysecret',
+      reenterPassword: 'mysecret',
     }
     await axios.post('/auth/signup', params)
     const loginParams = {
@@ -35,7 +37,7 @@ describe('auth.test.ts', () => {
     }
     const response = await axios.post('/auth/login', loginParams)
     expect(response.status).toEqual(200)
-    expect(response.data.username).toEqual(params.email)
+    expect(response.data.email).toEqual(params.email)
   })
 
   it('should attach a JWT token on POST /auth/login', async () => {
@@ -44,6 +46,7 @@ describe('auth.test.ts', () => {
       lastName: 'McDonald',
       email: 'test@example.com',
       password: 'mysecret',
+      reenterPassword: 'mysecret',
     }
     await axios.post('/auth/signup', params)
     const loginParams = {
@@ -75,6 +78,7 @@ describe('auth.test.ts', () => {
       lastName: 'McDonald',
       email: 'test@example.com',
       password: 'mysecret',
+      reenterPassword: 'mysecret',
     }
     await axios.post('/auth/signup', params)
     const loginParams = {
@@ -90,7 +94,9 @@ describe('auth.test.ts', () => {
     }
   })
 
-  it('should not allow access to a protected resource if not logged in', async () => {
+  // Removed this feature for now
+  // Do this on carts and orders
+  it.skip('should not allow access to a protected resource if not logged in', async () => {
     const params = {
       author: 'ron',
       body: 'Hello',
