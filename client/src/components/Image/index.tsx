@@ -4,24 +4,36 @@ type ImageProps = {
   src: string
   alt?: string
   sx?: object
+  height?: string
+  objectFit?: string
+  backgroundSize?: string
+  backgroundRepeat?: string
+  maxWidth?: string
+  maxHeight?: string
+  // backgroundImage?: string
+  [key: string]: any
 }
 
-const Image = ({ src, alt, sx }: ImageProps) => {
+const Image = (props: ImageProps) => {
+  const { src, alt, ...sx } = props
   return (
     <Box
       component="img"
-      src={src}
-      alt={alt}
+      src={props.src}
+      alt={props.alt}
       sx={{
-        maxWidth: '100%',
-        maxHeight: '100%',
-        objectFit: 'contain',
-        backgroundSize: 'contain',
-        backgroundRepeat: 'no-repeat',
         ...sx,
       }}
     />
   )
+}
+
+Image.defaultProps = {
+  objectFit: 'contain',
+  backgroundSize: 'contain',
+  backgroundRepeat: 'no-repeat',
+  maxWidth: '100%',
+  maxHeight: '100%',
 }
 
 export { Image }

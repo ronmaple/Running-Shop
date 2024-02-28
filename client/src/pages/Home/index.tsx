@@ -1,47 +1,76 @@
 import Button from '@mui/material/Button'
 
-import Card from '@mui/material/Card'
-import CardActions from '@mui/material/CardActions'
-import CardContent from '@mui/material/CardContent'
-import CardMedia from '@mui/material/CardMedia'
-import Grid from '@mui/material/Grid'
 import Stack from '@mui/material/Stack'
 import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
 import Container from '@mui/material/Container'
+import { useNavigate } from 'react-router-dom'
+import background1 from '../../assets/background_1.webp'
 
-// From MUI templates
+// const SLOGAN = 'Stride Further with Endurify'
+const tagline = 'Stride Farther'
+const heroText = `
+            Elevate your performance and style with our curated selection,
+            designed for runners who demand the best. Experience unparalleled
+            comfort and innovation with every step.
+`
+
 const Home = () => {
-  const cards = [1, 2, 3, 4, 5, 6, 7, 8, 9]
+  const navigate = useNavigate()
+
+  const handleBrowseButton: React.MouseEventHandler<HTMLButtonElement> = (
+    _event
+  ) => {
+    navigate('/products')
+  }
+
   return (
     <main>
-      {/* Hero unit */}
       <Box
         sx={{
+          backgroundImage: `url(${background1})`,
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
           bgcolor: 'background.paper',
           pt: 8,
           pb: 6,
+          height: '100vh',
         }}
       >
-        <Container maxWidth="sm">
+        <Container
+          maxWidth="sm"
+          sx={{
+            p: 3,
+          }}
+        >
           <Typography
-            component="h1"
-            variant="h2"
+            component="h2"
+            variant="h4"
             align="center"
-            color="text.primary"
+            sx={{
+              color: 'white',
+              backgroundColor: '#333333',
+              padding: '0.2em 0.5em',
+              borderRadius: '4px',
+              opacity: '0.95',
+            }}
             gutterBottom
           >
-            Album layout
+            {tagline}
           </Typography>
           <Typography
-            variant="h5"
+            variant="body1"
             align="center"
-            color="text.secondary"
+            sx={{
+              color: 'white',
+              backgroundColor: '#333333',
+              padding: '0.2em 1em',
+              borderRadius: '4px',
+              opacity: '0.95',
+            }}
             paragraph
           >
-            Something short and leading about the collection below—its contents,
-            the creator, etc. Make it short and sweet, but not too short so
-            folks don&apos;t simply skip over it entirely.
+            {heroText}
           </Typography>
           <Stack
             sx={{ pt: 4 }}
@@ -49,49 +78,20 @@ const Home = () => {
             spacing={2}
             justifyContent="center"
           >
-            <Button variant="contained">Main call to action</Button>
-            <Button variant="outlined">Secondary action</Button>
+            <Button
+              onClick={handleBrowseButton}
+              sx={{
+                textTransform: 'none',
+                borderRadius: '0',
+                boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.2)',
+              }}
+              variant="contained"
+            >
+              Browse Our Selections
+            </Button>
           </Stack>
         </Container>
       </Box>
-      <Container sx={{ py: 8 }} maxWidth="md">
-        {/* End hero unit */}
-        <Grid container spacing={4}>
-          {cards.map((card) => (
-            <Grid item key={card} xs={12} sm={6} md={4}>
-              <Card
-                sx={{
-                  height: '100%',
-                  display: 'flex',
-                  flexDirection: 'column',
-                }}
-              >
-                <CardMedia
-                  component="div"
-                  sx={{
-                    // 16:9
-                    pt: '56.25%',
-                  }}
-                  image="https://source.unsplash.com/random?wallpapers"
-                />
-                <CardContent sx={{ flexGrow: 1 }}>
-                  <Typography gutterBottom variant="h5" component="h2">
-                    Heading
-                  </Typography>
-                  <Typography>
-                    This is a media card. You can use this section to describe
-                    the content.
-                  </Typography>
-                </CardContent>
-                <CardActions>
-                  <Button size="small">View</Button>
-                  <Button size="small">Edit</Button>
-                </CardActions>
-              </Card>
-            </Grid>
-          ))}
-        </Grid>
-      </Container>
     </main>
   )
 }
