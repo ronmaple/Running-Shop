@@ -32,6 +32,7 @@ export const register: RequestHandler = async (req, res) => {
       password: hashedPassword,
     })
 
+    // TODO do not send user, just send a message. Frontend will re-direct to /login page instead
     res.status(200).send(user)
   } catch (err: any) {
     console.log(err)
@@ -68,8 +69,13 @@ export const login: RequestHandler = async (req, res) => {
       jwtSecret,
       { expiresIn: maxAge }
     )
-    res.cookie('jwt', token, { httpOnly: true, maxAge: maxAge * 1000 })
-    res.status(200).send(existingUser)
+    // Decided to send the token instead of http-only -- for simplicity. Can revisit later
+    // res.cookie('jwt', token, { httpOnly: true, maxAge: maxAge * 1000 })
+    // res.status(200).send(existingUser)
+    res.status(200).send({
+      ...existingUser.toJSON(), // send just what is needed, later
+      token,
+    })
   } catch (err: any) {
     if (err.message === 'Not Found') {
       return res.status(404).send({ message: err.message })
