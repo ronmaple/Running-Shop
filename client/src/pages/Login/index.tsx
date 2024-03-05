@@ -16,43 +16,12 @@ import Container from '@mui/material/Container'
 
 const Login = () => {
   const navigate = useNavigate()
-  const { setToken } = useContext(AuthContext)
+  const { onLogin } = useContext(AuthContext)
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
     const data = new FormData(event.currentTarget)
-    const payload = JSON.stringify({
-      email: data.get('email'),
-      password: data.get('password'),
-    })
-
-    try {
-      // Todo make this a util
-      const response = (
-        await fetch('http://localhost:3000/auth/login', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: payload,
-        })
-      ).json()
-      // @ts-ignore-next-line
-      if (response.token) {
-        // @ts-ignore-next-line
-        setToken(response.token)
-        // @ts-ignore-next-line
-        localStorage.setItem('token', response.token)
-        navigate('/account')
-      }
-    } catch (error) {
-      console.log('error')
-      console.error(error)
-      setToken(null)
-      // TODO something with error
-      // need to generalize the error handling first
-      // for validation errors + server errors
-    }
+    await onLogin(data.get('email'), data.get('password'))
   }
 
   return (

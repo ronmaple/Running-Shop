@@ -24,3 +24,4 @@ export const authenticate = (
     return res.status(401).send({ message: 'Unauthorized' })
   }
 }
+ 

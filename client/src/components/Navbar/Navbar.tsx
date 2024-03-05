@@ -16,6 +16,7 @@ import Tooltip from '@mui/material/Tooltip'
 import MenuItem from '@mui/material/MenuItem'
 import AdbIcon from '@mui/icons-material/Adb'
 import LoginIcon from '@mui/icons-material/Login'
+import { useAuth } from '../../context/useAuth'
 
 const pages = [
   {
@@ -45,6 +46,7 @@ const settings = {
 // TODO: separate into components
 const NavigationBar = () => {
   const navigate = useNavigate()
+  const { token } = useAuth()
   // TODO get user from context
   const user = null
 
@@ -191,7 +193,7 @@ const NavigationBar = () => {
               open={Boolean(anchorElUser)}
               onClose={handleCloseUserMenu}
             >
-              {settings[user ? 'authenticated' : 'unauthenticated'].map(
+              {settings[token ? 'authenticated' : 'unauthenticated'].map(
                 (setting) => (
                   <MenuItem key={setting.label} onClick={handleCloseUserMenu}>
                     <Link to={setting.route}>
