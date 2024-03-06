@@ -21,17 +21,25 @@ const cartSchema = new Schema(
   {
     id: String,
     items: [cartItem],
-    userId: {
-      type: Schema.Types.ObjectId,
-      ref: 'User',
-      required: true,
-    },
+    // userId: {
+    //   type: Schema.Types.ObjectId,
+    //   ref: 'User',
+    //   required: true,
+    // },
 
     // TODO disambuigate tax
     totalPrice: Number,
   },
   {
+    // todo: standardize time formats
     timestamps: true,
+    toJSON: {
+      transform: function (doc, ret) {
+        ret.id = ret._id.toString()
+        delete ret._id
+        delete ret.__v
+      },
+    },
   }
 )
 

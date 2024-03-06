@@ -19,6 +19,10 @@ export const register: RequestHandler = async (req, res) => {
     if (existingUser) {
       throw new Error('email already taken')
     }
+    // Not overdoing it here. Will need to add actual validation (ticket#74)
+    if (body.password !== body.reenterPassword) {
+      throw new Error('Signup Error')
+    }
 
     const hashedPassword = await bcrypt.hash(body.password, saltRounds)
     const user = await User.create({
@@ -28,11 +32,15 @@ export const register: RequestHandler = async (req, res) => {
       password: hashedPassword,
     })
 
+    // TODO do not send user, just send a message. Frontend will re-direct to /login page instead
     res.status(200).send(user)
   } catch (err: any) {
     console.log(err)
     if (err.message === 'email already taken') {
       return res.status(409).send({ message: err.message })
+    }
+    if (err.message === 'Signup Error') {
+      return res.status(422).send({ message: 'Signup Error' })
     }
     return res.send(500)
   }
@@ -61,8 +69,13 @@ export const login: RequestHandler = async (req, res) => {
       jwtSecret,
       { expiresIn: maxAge }
     )
-    res.cookie('jwt', token, { httpOnly: true, maxAge: maxAge * 1000 })
-    res.status(200).send(existingUser)
+    // Decided to send the token instead of http-only -- for simplicity. Can revisit later
+    // res.cookie('jwt', token, { httpOnly: true, maxAge: maxAge * 1000 })
+    // res.status(200).send(existingUser)
+    res.status(200).send({
+      ...existingUser.toJSON(), // send just what is needed, later
+      token,
+    })
   } catch (err: any) {
     if (err.message === 'Not Found') {
       return res.status(404).send({ message: err.message })

@@ -23,13 +23,16 @@ describe('products.test.ts', () => {
       images: ['http://example.com/image.jpg'],
     }
     const response = await axios.post('/products', product, { headers })
+    const { data } = response
     expect(response.status).toEqual(201)
-    expect(response.data.title).toEqual(product.title)
-    expect(response.data.description).toEqual(product.description)
-    expect(response.data.unitPrice).toEqual(product.unitPrice)
-    expect(response.data.salePrice).toEqual(product.salePrice)
-    expect(response.data.inventory).toEqual(product.inventory)
-    expect(response.data.images).toEqual(product.images)
+    expect(data.title).toEqual(product.title)
+    expect(data.description).toEqual(product.description)
+    expect(data.unitPrice).toEqual(product.unitPrice)
+    expect(data.salePrice).toEqual(product.salePrice)
+    expect(data.inventory).toEqual(product.inventory)
+    expect(data.images).toEqual(product.images)
+    expect(data.id).not.toBeNull()
+    expect(data._id).toBeUndefined()
   })
 
   it('should get a product by id on GET /products/:id', async () => {
@@ -44,16 +47,17 @@ describe('products.test.ts', () => {
     let response = await axios.post('/products', product, { headers })
     expect(response.status).toEqual(201)
 
-    const id = response.data._id
-    response = await axios.get(`/products/${id}`, { headers })
+    response = await axios.get(`/products/${response.data.id}`, { headers })
+    const { data } = response
     expect(response.status).toEqual(200)
-    expect(response.data._id).toEqual(id)
-    expect(response.data.title).toEqual(product.title)
-    expect(response.data.description).toEqual(product.description)
-    expect(response.data.unitPrice).toEqual(product.unitPrice)
-    expect(response.data.salePrice).toEqual(product.salePrice)
-    expect(response.data.inventory).toEqual(product.inventory)
-    expect(response.data.images).toEqual(product.images)
+    expect(data.id).toEqual(data.id)
+    expect(data._id).toBeUndefined()
+    expect(data.title).toEqual(product.title)
+    expect(data.description).toEqual(product.description)
+    expect(data.unitPrice).toEqual(product.unitPrice)
+    expect(data.salePrice).toEqual(product.salePrice)
+    expect(data.inventory).toEqual(product.inventory)
+    expect(data.images).toEqual(product.images)
   })
 
   it('should update a product by id on PUT /products/:id', async () => {
@@ -68,7 +72,7 @@ describe('products.test.ts', () => {
     let response = await axios.post('/products', product, { headers })
     expect(response.status).toEqual(201)
 
-    const id = response.data._id
+    const id = response.data.id
     const updatedProduct = {
       title: 'Updated Product',
       description: 'This is an updated test product',
@@ -78,14 +82,16 @@ describe('products.test.ts', () => {
       images: ['http://example.com/updated_image.jpg'],
     }
     response = await axios.put(`/products/${id}`, updatedProduct, { headers })
+    const { data } = response
     expect(response.status).toEqual(200)
-    expect(response.data._id).toEqual(id)
-    expect(response.data.title).toEqual(updatedProduct.title)
-    expect(response.data.description).toEqual(updatedProduct.description)
-    expect(response.data.unitPrice).toEqual(updatedProduct.unitPrice)
-    expect(response.data.salePrice).toEqual(updatedProduct.salePrice)
-    expect(response.data.inventory).toEqual(updatedProduct.inventory)
-    expect(response.data.images).toEqual(updatedProduct.images)
+    expect(data.id).toEqual(id)
+    expect(data._id).toBeUndefined()
+    expect(data.title).toEqual(updatedProduct.title)
+    expect(data.description).toEqual(updatedProduct.description)
+    expect(data.unitPrice).toEqual(updatedProduct.unitPrice)
+    expect(data.salePrice).toEqual(updatedProduct.salePrice)
+    expect(data.inventory).toEqual(updatedProduct.inventory)
+    expect(data.images).toEqual(updatedProduct.images)
   })
 
   it('should delete a product by id on DELETE /products/:id', async () => {
@@ -100,7 +106,7 @@ describe('products.test.ts', () => {
     let response = await axios.post('/products', product, { headers })
     expect(response.status).toEqual(201)
 
-    const id = response.data._id
+    const id = response.data.id
     response = await axios.delete(`/products/${id}`, { headers })
     expect(response.status).toEqual(204)
   })
