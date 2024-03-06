@@ -6,6 +6,7 @@ import cors from 'cors'
 import healthRoute from './health/routes'
 import productRoute from './product/routes'
 import authRoutes from './auth/routes'
+import cartRoutes from './cart/routes'
 import { rateLimit } from './ratelimit/middlewares'
 import { authenticate } from './auth/middlewares'
 
@@ -24,6 +25,7 @@ app.use('/', healthRoute)
 
 app.use('/products', productRoute)
 app.use('/auth', authRoutes)
+app.use('/carts', cartRoutes)
 
 app.use('/static', express.static('s3/public'))
 
