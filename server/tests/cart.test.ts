@@ -14,36 +14,38 @@ describe('carts.test.ts', () => {
   //   await axios.delete('/auth/purge')
   // })
 
+  // Changed the flow. Create cart no longer needs these. Will leave commented until fully fleshed out
   it.only('should create a cart on POST /carts', async () => {
-    const productPayload = {
-      title: 'Nike Vaporfly',
-      description: 'Super fast shoes',
-      unitPrice: 300,
-      salePrice: 340,
-      inventory: 1,
-      images: [''],
-    }
-    const productResponse = await axios.post('/products', productPayload)
-    const product = productResponse.data
-    const cartPayload = {
-      // userId: 'someUserId', // Replace with actual user ID
-      items: [
-        {
-          title: product.title,
-          description: product.description,
-          productId: product.id, // Replace with actual product ID
-          quantity: 2,
-          pricePerUnit: product.salePrice,
-        },
-      ],
-    }
-    const response = await axios.post('/carts', cartPayload, { headers })
+    // const productPayload = {
+    //   title: 'Nike Vaporfly',
+    //   description: 'Super fast shoes',
+    //   unitPrice: 300,
+    //   salePrice: 340,
+    //   inventory: 1,
+    //   images: [''],
+    // }
+    // const productResponse = await axios.post('/products', {})
+    // const product = productResponse.data
+    // const cartPayload = {
+    //   // userId: 'someUserId', // Replace with actual user ID
+    //   items: [
+    //     {
+    //       title: product.title,
+    //       description: product.description,
+    //       productId: product.id, // Replace with actual product ID
+    //       quantity: 2,
+    //       pricePerUnit: product.salePrice,
+    //     },
+    //   ],
+    // }
+    const response = await axios.post('/carts', {}, { headers })
     expect(response.status).toEqual(201)
-    expect(response.data.items.length).toEqual(1)
-    expect(response.data.items[0].description).toEqual('Super fast shoes')
-    expect(response.data.items[0].title).toEqual('Nike Vaporfly')
-    expect(response.data.items[0].quantity).toEqual(2)
-    expect(response.data.totalPrice).toEqual(680)
+    expect(response.data.items.length).toEqual(0)
+    // expect(response.data.items.length).toEqual(1)
+    // expect(response.data.items[0].description).toEqual('Super fast shoes')
+    // expect(response.data.items[0].title).toEqual('Nike Vaporfly')
+    // expect(response.data.items[0].quantity).toEqual(2)
+    // expect(response.data.totalPrice).toEqual(680)
 
     // await axios.delete('/products/purge')
   })
