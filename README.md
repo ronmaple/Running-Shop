@@ -77,3 +77,12 @@ Work in progress:
 https://pretius.com/blog/open-ai-code-review/
 
 
+### Cart Flow:
+1. Browser will check client if there's a hash in localStorage
+2. If no has, create a cart
+3. If hash, query the backend for cart
+Endpoints
+- add to cart
+- update cart item
+- delete cart item
+- create cart (during initial hash)
