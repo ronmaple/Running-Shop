@@ -90,14 +90,10 @@ export const create: RequestHandler = async (req, res) => {
   }
 }
 
-// I don't quite like findOneAndUpdate, but I'll
-// keep it as it is since this doesn't need to be
-// over-done in this type of repo
 export const addToCart: RequestHandler = async (req, res) => {
   const id = req.params.id
   const body = req.body
   try {
-    // await carts.findOneAndUpdate({ _id: id }, body)
     const cart = await carts.findOne({ _id: id })
     if (!cart) {
       throw new Error('Not Found')

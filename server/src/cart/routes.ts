@@ -3,7 +3,6 @@ import {
   // search,
   getCart,
   create,
-  // update,
   addToCart,
   updateCartItem,
   removeCartItem,
