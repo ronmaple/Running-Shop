@@ -76,26 +76,12 @@ type Cart = {
 // TODO: proper validation
 // TODO proper architecture to separate concerns
 export const create: RequestHandler = async (req, res) => {
-  const body = req.body
+  // const body = req.body
   try {
-    await validateCartItems(body.items)
+    // await validateCartItems(body.items)
     const cartData: Cart = {
       items: [],
       totalPrice: 0,
-    }
-    for (const item of body.items) {
-      const product = await productModel.findById(item.productId)
-      if (product) {
-        cartData.items.push({
-          description: product.description || '',
-          title: product.title || '',
-          quantity: item.quantity,
-          // @ts-ignore
-          productId: product._id || '',
-          pricePerUnit: product.salePrice,
-        })
-        cartData.totalPrice += item.quantity * product.salePrice
-      }
     }
     const cart = await carts.create(cartData)
     return res.status(201).send(cart)
