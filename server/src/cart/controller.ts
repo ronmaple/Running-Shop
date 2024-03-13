@@ -44,13 +44,9 @@ export const getCart: RequestHandler = async (req, res) => {
 // }
 
 const validateCartItem = async (item: CartItem) => {
-  // Need a better architecture for data access
   if (!item) {
     throw new Error('Cart Item required')
   }
-  // if (!item.productId) {
-  //   throw new Error('Valid CartItem.productId is required')
-  // }
   if (!(await productModel.findById(item.productId))) {
     throw new Error('Valid CartItem.productId is required')
   }
@@ -74,9 +70,7 @@ type Cart = {
 // TODO: proper validation
 // TODO proper architecture to separate concerns
 export const create: RequestHandler = async (req, res) => {
-  // const body = req.body
   try {
-    // await validateCartItems(body.items)
     const cartData: Cart = {
       items: [],
       totalPrice: 0,
