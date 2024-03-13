@@ -1,21 +1,27 @@
 import { Router } from 'express'
 import {
   // search,
-  get,
+  getCart,
   create,
-  update,
+  // update,
+  addToCart,
+  updateCartItem,
+  removeCartItem,
   deleteProduct,
 } from './controller'
 
 const route = Router()
 // route.get('/', search)
 
-// route.post('/:id/items', addItem)
-// route.put('/:id/items/:itemId', updateItem)
-// route.delete('/:id/items/:itemid', deleteItem)
 route.post('/', create)
-route.get('/:id', get)
-route.put('/:id', update)
+route.get('/:id', getCart)
+route.post('/:id/items', addToCart)
+route.put('/:id/items/:itemId', updateCartItem)
+route.delete('/:id/items/:itemId', removeCartItem)
+
+// // TODOs
+// route.post('/:id/cart/check-out')
+// make delete cart
 route.delete('/:id', deleteProduct)
 
 export default route
