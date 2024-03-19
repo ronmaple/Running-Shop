@@ -114,22 +114,31 @@ describe('carts.test.ts', () => {
   it('should delete a cart by id on DELETE /carts/:id', async () => {
     const cart = {
       userId: 'someUserId', // Replace with actual user ID
-      items: [
-        {
-          title: 'Test Product',
-          description: 'This is a test product',
-          productId: 'someProductId', // Replace with actual product ID
-          quantity: 2,
-          pricePerUnit: 50,
-        },
-      ],
-      totalPrice: 100,
     }
     let response = await axios.post('/carts', cart, { headers })
     expect(response.status).toEqual(201)
 
-    const id = response.data._id
-    response = await axios.delete(`/carts/${id}`, { headers })
-    expect(response.status).toEqual(204)
+    const id = response.data.id
+    const addItemPayload = {
+      // TODO: shoe sizes, color, etc
+      // For now, just do product
+      productId: products[0].id,
+    }
+    response = await axios.post(`/carts/${id}/items`, addItemPayload, {
+      headers,
+    })
+    expect(response.status).toEqual(200)
+    expect(response.data.id).toEqual(id)
+    expect(response.data.items.length).toEqual(1)
+    expect(response.data.totalPrice).toEqual(products[0].salePrice)
+
+    const item = response.data.items[0]
+    response = await axios.delete(`/carts/${id}/items/${item.id}`, {
+      headers,
+    })
+    expect(response.status).toEqual(200)
+    expect(response.data.id).toEqual(id)
+    expect(response.data.items.length).toEqual(0)
+    expect(response.data.totalPrice).toEqual(0)
   })
 })
