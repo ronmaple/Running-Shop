@@ -41,6 +41,14 @@ const cartSchema = new Schema(
         ret.id = ret._id.toString()
         delete ret._id
         delete ret.__v
+        if (Array.isArray(ret.items)) {
+          ret.items = ret.items.map((item) => {
+            item.id = item._id.toString()
+            item.productId = item.productId.toString()
+            delete item._id
+            return item
+          })
+        }
       },
     },
   }
