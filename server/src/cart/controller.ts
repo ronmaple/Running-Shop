@@ -6,7 +6,7 @@ interface RequestHandler {
   (req: Request, res: Response): Promise<Response | any>
 }
 
-export const get: RequestHandler = async (req, res) => {
+export const getCart: RequestHandler = async (req, res) => {
   const id = req.params.id
   try {
     const cart = await carts.findById(id)
@@ -43,18 +43,12 @@ export const get: RequestHandler = async (req, res) => {
 //   }
 // }
 
-const validateCartItems = async (cartItems: CartItem[]) => {
-  // Need a better architecture for data access
-  if (!Array.isArray(cartItems) || cartItems.length <= 0) {
-    throw new Error('Cart Items required')
+const validateCartItem = async (item: CartItem) => {
+  if (!item) {
+    throw new Error('Cart Item required')
   }
-  for (const item of cartItems) {
-    if (!item.productId) {
-      throw new Error('Valid CartItem.productId is required')
-    }
-    if (!(await productModel.findById(item.productId))) {
-      throw new Error('Valid CartItem.productId is required')
-    }
+  if (!(await productModel.findById(item.productId))) {
+    throw new Error('Valid CartItem.productId is required')
   }
 }
 
@@ -76,9 +70,7 @@ type Cart = {
 // TODO: proper validation
 // TODO proper architecture to separate concerns
 export const create: RequestHandler = async (req, res) => {
-  // const body = req.body
   try {
-    // await validateCartItems(body.items)
     const cartData: Cart = {
       items: [],
       totalPrice: 0,
@@ -92,15 +84,32 @@ export const create: RequestHandler = async (req, res) => {
   }
 }
 
-// I don't quite like findOneAndUpdate, but I'll
-// keep it as it is since this doesn't need to be
-// over-done in this type of repo
-export const update: RequestHandler = async (req, res) => {
+export const addToCart: RequestHandler = async (req, res) => {
   const id = req.params.id
   const body = req.body
   try {
-    await carts.findOneAndUpdate({ _id: id }, body)
     const cart = await carts.findOne({ _id: id })
+    if (!cart) {
+      throw new Error('Not Found')
+    }
+    await validateCartItem(body)
+    const product = await productModel.findOne({
+      _id: body.productId,
+    })
+
+    if (!product) {
+      throw new Error('Product not found')
+    }
+
+    cart.items.push({
+      productId: product._id,
+      description: product.description,
+      title: product.title,
+      quantity: 1,
+      pricePerUnit: product.salePrice,
+    })
+
+    await cart.save()
     res.send(cart)
   } catch (err) {
     // TODO generic error handler
@@ -108,6 +117,46 @@ export const update: RequestHandler = async (req, res) => {
     res.sendStatus(500)
   }
 }
+
+export const updateCartItem: RequestHandler = async (req, res) => {
+  const id = req.params.id
+  const body = req.body
+  try {
+    res.send('TODO')
+  } catch (err) {
+    // TODO generic error handler
+    console.error(err)
+    res.sendStatus(500)
+  }
+}
+
+export const removeCartItem: RequestHandler = async (req, res) => {
+  const id = req.params.id
+  const body = req.body
+  try {
+    res.send('TODO')
+  } catch (err) {
+    // TODO generic error handler
+    console.error(err)
+    res.sendStatus(500)
+  }
+}
+
+
+// export const update: RequestHandler = async (req, res) => {
+//   const id = req.params.id
+//   const body = req.body
+//   try {
+//     await carts.findOneAndUpdate({ _id: id }, body)
+//     const cart = await carts.findOne({ _id: id })
+//     res.send(cart)
+//   } catch (err) {
+//     // TODO generic error handler
+//     console.error(err)
+//     res.sendStatus(500)
+//   }
+// }
+
 
 export const deleteProduct: RequestHandler = async (req, res) => {
   const id = req.params.id
