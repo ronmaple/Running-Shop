@@ -14,7 +14,10 @@ const cartItem = new Schema({
     required: true,
     min: 1,
   },
-  pricePerUnit: Number,
+  pricePerUnit: {
+    type: Number,
+    required: true,
+  },
 })
 
 const cartSchema = new Schema(
@@ -38,10 +41,27 @@ const cartSchema = new Schema(
         ret.id = ret._id.toString()
         delete ret._id
         delete ret.__v
+        if (Array.isArray(ret.items)) {
+          ret.items = ret.items.map((item) => {
+            item.id = item._id.toString()
+            item.productId = item.productId.toString()
+            delete item._id
+            return item
+          })
+        }
       },
     },
   }
 )
+
+cartSchema.pre('save', function () {
+  const cart = this
+  let totalPrice = 0
+  for (const item of cart.items) {
+    totalPrice = item.pricePerUnit * item.quantity
+  }
+  cart.totalPrice = totalPrice
+})
 
 const cart = mongoose.model('cart', cartSchema)
 
