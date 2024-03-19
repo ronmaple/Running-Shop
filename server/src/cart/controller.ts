@@ -138,7 +138,7 @@ export const updateCartItem: RequestHandler = async (req, res) => {
     if (body.quantity < 0) {
       throw new Error('Invalid quantity')
     }
-
+    // can also be done with findOneAndUpdate -- $set
     cart.items[itemIndex].quantity = body.quantity
     await cart.save()
     res.send(cart)
@@ -150,10 +150,29 @@ export const updateCartItem: RequestHandler = async (req, res) => {
 }
 
 export const removeCartItem: RequestHandler = async (req, res) => {
-  const id = req.params.id
+  const { id, itemId } = req.params
   const body = req.body
   try {
-    res.send('TODO')
+    let cart = await carts.findOne({ _id: id })
+    if (!cart) {
+      throw new Error('Not Found')
+    }
+
+    const itemIndex = cart.items.findIndex(
+      (item) => item._id?.toString() === itemId // TODO fix the type issue here with the ?.
+    )
+
+    if (itemIndex === -1) {
+      throw new Error('Cart Item not found')
+    }
+
+    if (body.quantity < 0) {
+      throw new Error('Invalid quantity')
+    }
+    // can also be done with findOneAndUpdate -- $set
+    cart.items.splice(itemIndex, 1)
+    await cart.save()
+    res.send(cart)
   } catch (err) {
     // TODO generic error handler
     console.error(err)
