@@ -16,6 +16,7 @@ import { About } from './pages/About'
 import { ProductDetail } from './pages/ProductDetail'
 import { AccountHome } from './pages/AccountHome'
 import { ProtectedRoute } from './containers/ProtectedRoute'
+import { Cart } from './pages/Cart'
 
 // TODO add theme
 const defaultTheme = createTheme()
@@ -33,6 +34,7 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/about" element={<About />} />
+          <Route path="/cart" element={<Cart />} />
 
           <Route
             path="/account"
