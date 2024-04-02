@@ -6,6 +6,9 @@ import { formatPrice } from '../../utils/numberFormatter'
 import { formatImageUrl } from '../../utils/formatImageUrl'
 import { Image } from '../../components/Image'
 
+import productService from '../../services/ProductService'
+import cartService from '../../services/CartService'
+
 export type Product = {
   id: string
   title: string
@@ -16,33 +19,32 @@ export type Product = {
   images: string[]
 }
 
-const getProduct = async (id) => {
-  const response = await fetch(`http://localhost:3000/products/${id}`)
-  const data = await response.json()
-  return data
-}
-
 const ProductDetail = (props) => {
   const { id } = useParams()
   const [product, setProduct] = useState<Product>({} as Product)
   const [loading, setLoading] = useState<boolean>(true)
   const [error, setError] = useState<Error>()
 
-  console.log('----')
   useEffect(() => {
     // todo make this better
     setLoading(true)
-    getProduct(id)
+    productService
+      .getById(id as string)
       .then((res) => {
         setProduct(res)
-        console.log('2')
         setLoading(false)
       })
-      .catch((err) => {
-        setError(err)
+      .catch((error) => {
+        setError(error)
         setLoading(false)
       })
   }, [id])
+
+  const handleAddToCart = async () => {
+    // TODO: handle cart creation through hash:
+    const cart = await cartService.createCart()
+    await cartService.addToCart(cart.id, id as string)
+  }
 
   if (loading) {
     return <div>Loading...</div>
@@ -102,7 +104,7 @@ const ProductDetail = (props) => {
                 {formatPrice(product.salePrice)}
               </Typography>
             </Container>
-            <Button>Add To Cart</Button>
+            <Button onClick={handleAddToCart}>Add To Cart</Button>
           </Paper>
         </Grid>
       </Grid>
