@@ -1,14 +1,14 @@
 import axiosLib, { AxiosInstance } from 'axios'
 
-interface HttpServiceConfig {
+export interface HttpServiceConfig {
   baseURL: string
 }
 
 interface IHttpService {
-  get(url: string): Promise<any>
-  post(url: string, payload: any): Promise<any>
-  put(url: string, payload: any): Promise<any>
-  delete(url: string): Promise<any>
+  // _get(url: string): Promise<any>
+  // _post(url: string, payload: any): Promise<any>
+  // _put(url: string, payload: any): Promise<any>
+  // _delete(url: string): Promise<any>
 }
 
 class HttpService implements IHttpService {
@@ -46,7 +46,7 @@ class HttpService implements IHttpService {
     }
   }
 
-  async onRequest(request: Promise<any>) {
+  private async onRequest(request: Promise<any>) {
     try {
       const { data } = await request
       return data
@@ -55,23 +55,23 @@ class HttpService implements IHttpService {
     }
   }
 
-  get(url: string): Promise<any> {
+  protected _get(url: string): Promise<any> {
     return this.onRequest(this.axios.get(url, { headers: this.headers }))
   }
 
-  post(url: string, payload: any): Promise<any> {
+  protected _post(url: string, payload: any): Promise<any> {
     return this.onRequest(
       this.axios.post(url, payload, { headers: this.headers })
     )
   }
 
-  put(url: string, payload: any): Promise<any> {
+  protected _put(url: string, payload: any): Promise<any> {
     return this.onRequest(
       this.axios.put(url, payload, { headers: this.headers })
     )
   }
 
-  delete(url: string): Promise<any> {
+  protected _delete(url: string): Promise<any> {
     return this.onRequest(this.axios.get(url, { headers: this.headers }))
   }
 }

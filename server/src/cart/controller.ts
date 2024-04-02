@@ -90,7 +90,7 @@ export const addToCart: RequestHandler = async (req, res) => {
   try {
     const cart = await carts.findOne({ _id: id })
     if (!cart) {
-      throw new Error('Not Found')
+      throw new Error('Cart Not Found')
     }
     await validateCartItem(body)
     const product = await productModel.findOne({
