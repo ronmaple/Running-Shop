@@ -101,12 +101,15 @@ export const addToCart: RequestHandler = async (req, res) => {
       throw new Error('Product not found')
     }
 
+    // TODO: If cart item already exists, just add item instead.
+    // Follow up ticket:
     cart.items.push({
       productId: product._id,
       description: product.description,
       title: product.title,
       quantity: 1,
       pricePerUnit: product.salePrice,
+      images: product.images,
     })
 
     await cart.save()

@@ -18,6 +18,7 @@ const cartItem = new Schema({
     type: Number,
     required: true,
   },
+  images: [String],
 })
 
 const cartSchema = new Schema(

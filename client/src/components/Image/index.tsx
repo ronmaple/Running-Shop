@@ -8,8 +8,8 @@ type ImageProps = {
   objectFit?: string
   backgroundSize?: string
   backgroundRepeat?: string
-  maxWidth?: string
-  maxHeight?: string
+  maxWidth?: string | number
+  maxHeight?: string | number
   // backgroundImage?: string
   [key: string]: any
 }
