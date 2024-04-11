@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Grid, Typography, Paper, Box, Button, Container } from '@mui/material'
-import { useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 
 import { formatPrice } from '../../utils/numberFormatter'
 import { formatImageUrl } from '../../utils/formatImageUrl'
@@ -21,6 +21,7 @@ export type Product = {
 
 const ProductDetail = (props) => {
   const { id } = useParams()
+  const navigate = useNavigate()
   const [product, setProduct] = useState<Product>({} as Product)
   const [loading, setLoading] = useState<boolean>(true)
   const [error, setError] = useState<Error>()
@@ -41,9 +42,23 @@ const ProductDetail = (props) => {
   }, [id])
 
   const handleAddToCart = async () => {
-    // TODO: handle cart creation through hash:
-    const cart = await cartService.createCart()
-    await cartService.addToCart(cart.id, id as string)
+    // How to make this better?
+    // 1. create a provider at root
+    // 2. checks if user is present
+    // 3. checks if user has open carts(?)
+    // 4. or checks if cart is cached
+    // 5. if not, create a cart
+
+    // Consider also storing the whole cart
+    // but for now, ID would probably do
+    let cartId = localStorage.getItem('cartId')
+    if (!cartId) {
+      const cart = await cartService.createCart()
+      cartId = cart.id
+      localStorage.setItem('cartId', cart.id)
+    }
+    await cartService.addToCart(cartId as string, id as string)
+    navigate('/cart')
   }
 
   if (loading) {

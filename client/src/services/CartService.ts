@@ -15,6 +15,10 @@ class CartService extends HttpService {
       productId,
     })
   }
+
+  getCart(cartId: string) {
+    return this._get(`/${cartId}`)
+  }
 }
 
 export default new CartService({

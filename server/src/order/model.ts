@@ -20,6 +20,7 @@ const orderItems = new Schema({
     min: 1,
   },
   pricePerUnit: Number,
+  images: [String],
 })
 
 const orderSchema = new Schema(
