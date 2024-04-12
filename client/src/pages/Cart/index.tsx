@@ -1,6 +1,5 @@
 import { PropsWithChildren, useEffect, useState } from 'react'
 import { Grid, Typography, Paper, Box, Button, Container } from '@mui/material'
-import { useParams } from 'react-router-dom'
 
 import { formatPrice } from '../../utils/numberFormatter'
 import { formatImageUrl } from '../../utils/formatImageUrl'
@@ -8,6 +7,12 @@ import { Image } from '../../components/Image'
 import cartService from '../../services/CartService'
 import IconButton from '@mui/material/IconButton'
 import DeleteIcon from '@mui/icons-material/Delete'
+import Table from '@mui/material/Table'
+import TableBody from '@mui/material/TableBody'
+import TableCell from '@mui/material/TableCell'
+import TableContainer from '@mui/material/TableContainer'
+import TableHead from '@mui/material/TableHead'
+import TableRow from '@mui/material/TableRow'
 
 type Cart = {
   items: CartItem[]
@@ -64,28 +69,10 @@ const Cart = () => {
         </Grid>
         {/* Checkout Totals */}
         <Grid item xs={5}>
-          <Paper
-            elevation={0}
-            sx={{
-              height: 500,
-              padding: 4,
-              display: 'flex',
-              flexDirection: 'column',
-              justifyContent: 'space-between',
-              backgroundColor: '#fafafa',
-            }}
-          >
-            <Container
-              sx={{
-                height: '100%',
-              }}
-            >
-              <Typography variant="h5" component="h5" gutterBottom>
-                Order Summary
-              </Typography>
-              <Button>Checkout</Button>
-            </Container>
-          </Paper>
+          <CheckoutSummary {...cart} />
+          <Box>
+            <Button>Checkout</Button>
+          </Box>
         </Grid>
       </Grid>
     </Box>
@@ -180,6 +167,55 @@ const CartItemComponent = (props: CartItemProps) => {
         </Box>
       </Grid>
     </Grid>
+  )
+}
+
+type CartProps = PropsWithChildren<Cart>
+
+const CheckoutSummary = (props: CartProps) => {
+  const rows = [
+    {
+      label: 'Subtotal',
+      value: props.items.length ? formatPrice(props.totalPrice, true) : '-',
+    },
+    {
+      label: 'Shipping',
+      value: 'Free',
+    },
+    {
+      label: 'Taxes',
+      value: 'Calculated at checkout',
+    },
+    {
+      label: 'Estimated Total',
+      value: props.items.length ? formatPrice(props.totalPrice, true) : '-',
+    },
+  ]
+  return (
+    <TableContainer component={Paper}>
+      <Table sx={{ minWidth: 650 }} aria-label="simple table">
+        <TableHead>
+          <TableRow>
+            <TableCell>
+              <Typography variant="h5" component="h5" gutterBottom>
+                Order Summary
+              </Typography>
+            </TableCell>
+            <TableCell align="right">filler</TableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {rows.map((row) => (
+            <TableRow key={row.label}>
+              <TableCell component="th" scope="row">
+                {row.label}
+              </TableCell>
+              <TableCell>{row.value}</TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+    </TableContainer>
   )
 }
 
