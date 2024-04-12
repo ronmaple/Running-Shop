@@ -2,12 +2,17 @@ import { useEffect, useState } from 'react'
 import { Grid, Typography, Paper, Box, Button, Container } from '@mui/material'
 
 import cartService from '../../services/CartService'
-import { Cart as CartType, CartItem as CartItemType } from './types'
+import {
+  Cart as CartType,
+  CartItem as CartItemType,
+  CartItemActions,
+} from './types'
 import CartItem from './CartItem'
 import CheckoutSummary from './CheckoutSummary'
 
 const Cart = () => {
   const [cart, setCart] = useState<CartType>({
+    id: '',
     items: [],
     totalPrice: 0,
   })
@@ -16,12 +21,52 @@ const Cart = () => {
     if (cartId) {
       cartService.getCart(cartId).then((data) => {
         setCart({
+          id: data.id,
           totalPrice: data.totalPrice,
           items: data.items,
         })
       })
     }
   }, [])
+
+  // debounce? use cartId Map for state?
+  // todo: loading
+  const handleCartItemAction = async (
+    itemId: string,
+    action: CartItemActions
+  ) => {
+    const target = cart.items.find((c) => c.id === itemId)
+    if (!target) {
+      throw new Error('Cannot find item')
+    }
+
+    let updatedCart: CartType
+    switch (action) {
+      case CartItemActions.increment:
+        const increasedQty = target.quantity + 1
+        updatedCart = await cartService.updateCartItem(cart.id, itemId, {
+          quantity: increasedQty,
+        })
+        break
+      case CartItemActions.decrement:
+        const decreasedQty = target.quantity - 1
+        updatedCart = await cartService.updateCartItem(cart.id, itemId, {
+          quantity: decreasedQty,
+        })
+        break
+      case CartItemActions.remove:
+        updatedCart = await cartService.removeCartItem(cart.id, itemId)
+        break
+      default:
+        throw new Error('Unknown Action')
+    }
+    setCart({
+      id: updatedCart.id,
+      items: updatedCart.items,
+      totalPrice: updatedCart.totalPrice,
+    })
+  }
+
   return (
     <Box maxHeight={500} p={5}>
       <Grid container spacing={1}>
@@ -49,12 +94,15 @@ const Cart = () => {
                 Items
               </Typography>
               {cart.items.map((item: CartItemType) => (
-                <CartItem {...item} />
+                <CartItem
+                  key={item.id}
+                  handleAction={handleCartItemAction}
+                  {...item}
+                />
               ))}
             </Container>
           </Paper>
         </Grid>
-        {/* Checkout Totals */}
         <Grid item xs={5}>
           <CheckoutSummary {...cart} />
           <Box>

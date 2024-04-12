@@ -1,17 +1,65 @@
-import { PropsWithChildren } from 'react'
-import { Grid, Typography, Box, Button } from '@mui/material'
+import React, { PropsWithChildren } from 'react'
+import { Grid, Typography, Box, Button as MuiButton } from '@mui/material'
 
 import { formatPrice } from '../../utils/numberFormatter'
 import { formatImageUrl } from '../../utils/formatImageUrl'
 import { Image } from '../../components/Image'
 import IconButton from '@mui/material/IconButton'
 import DeleteIcon from '@mui/icons-material/Delete'
-import { CartItem as CartItemType } from './types'
+import {
+  CartItem as CartItemType,
+  Cart as CartType,
+  CartItemActions,
+} from './types'
 
-type CartItemProps = PropsWithChildren<CartItemType>
+type CartItemProps = PropsWithChildren<
+  CartItemType & {
+    handleAction: (cartId: CartType['id'], action: CartItemActions) => void
+  }
+>
+
+type ButtonProps = PropsWithChildren<{
+  label: string
+  disableHover?: boolean
+  onClick?: ([key]: any) => any
+}>
+
+//Todo: make generic buttons later
+const Button = (props: ButtonProps) => {
+  const { disableHover = false, ...rest } = props
+  // todo use mui styles
+  const styles: any = {}
+  if (disableHover) {
+    styles['&:hover'] = {
+      background: 'none',
+    }
+  }
+
+  return (
+    <MuiButton {...rest} sx={styles} disableRipple={!!props.disableHover}>
+      {props.label}
+    </MuiButton>
+  )
+}
 
 const CartItem = (props: CartItemProps) => {
-  const { title, quantity, images, pricePerUnit } = props
+  const { id, title, quantity, images, pricePerUnit } = props
+
+  const handleIncrementQuantity = (
+    _event: React.MouseEvent<HTMLButtonElement>
+  ) => {
+    props.handleAction(id, CartItemActions.increment)
+  }
+
+  const handleDecrementQuantity = (
+    _event: React.MouseEvent<HTMLButtonElement>
+  ) => {
+    props.handleAction(id, CartItemActions.decrement)
+  }
+
+  const handleRemoveItem = (_event: React.MouseEvent<HTMLButtonElement>) => {
+    props.handleAction(id, CartItemActions.remove)
+  }
 
   return (
     <Grid container boxSizing="border-box">
@@ -42,28 +90,18 @@ const CartItem = (props: CartItemProps) => {
               </Box>
               <Box display="flex">
                 <Button
-                  sx={{
-                    '&:hover': {
-                      background: 'none',
-                    },
-                  }}
-                  disableRipple
-                >
-                  -
-                </Button>
+                  onClick={handleDecrementQuantity}
+                  disableHover={true}
+                  label="-"
+                />
                 <Box alignContent="center">
                   <Typography variant="subtitle2">{quantity}</Typography>
                 </Box>
                 <Button
-                  sx={{
-                    '&:hover': {
-                      background: 'none',
-                    },
-                  }}
-                  disableRipple
-                >
-                  +
-                </Button>
+                  onClick={handleIncrementQuantity}
+                  disableHover={true}
+                  label="+"
+                />
               </Box>
             </Box>
 
@@ -79,7 +117,7 @@ const CartItem = (props: CartItemProps) => {
             </Box>
           </Box>
           <Box display="flex" justifyContent="flex-start" marginLeft={2}>
-            <IconButton disableRipple>
+            <IconButton onClick={handleRemoveItem} disableRipple>
               <DeleteIcon />
             </IconButton>
           </Box>
