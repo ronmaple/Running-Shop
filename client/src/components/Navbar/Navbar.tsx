@@ -16,6 +16,7 @@ import Tooltip from '@mui/material/Tooltip'
 import MenuItem from '@mui/material/MenuItem'
 import AdbIcon from '@mui/icons-material/Adb'
 import LoginIcon from '@mui/icons-material/Login'
+import ShoppingCartIcon from '@mui/icons-material/ShoppingCart'
 import { useAuth } from '../../context/useAuth'
 
 const pages = [
@@ -68,6 +69,10 @@ const NavigationBar = () => {
 
   const handleCloseUserMenu = () => {
     setAnchorElUser(null)
+  }
+
+  const handleClickCartMenu = (_event: React.MouseEvent<HTMLElement>) => {
+    navigate('/cart')
   }
 
   return (
@@ -167,14 +172,25 @@ const NavigationBar = () => {
             ))}
           </Box>
 
-          <Box sx={{ flexGrow: 0 }}>
+          <Box
+            sx={{
+              flexGrow: 0,
+              display: 'flex',
+              alignItems: 'center',
+            }}
+          >
             <Tooltip title={user ? 'User Settings' : 'Register/Login'}>
-              <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+              <IconButton onClick={handleOpenUserMenu} sx={{ p: 1 }}>
                 {user ? (
                   <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" />
                 ) : (
                   <LoginIcon />
                 )}
+              </IconButton>
+            </Tooltip>
+            <Tooltip title={'Cart'}>
+              <IconButton onClick={handleClickCartMenu} sx={{ p: 1 }}>
+                <ShoppingCartIcon />
               </IconButton>
             </Tooltip>
             <Menu
