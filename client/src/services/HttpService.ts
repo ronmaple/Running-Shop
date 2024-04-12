@@ -72,7 +72,7 @@ class HttpService implements IHttpService {
   }
 
   protected _delete(url: string): Promise<any> {
-    return this.onRequest(this.axios.get(url, { headers: this.headers }))
+    return this.onRequest(this.axios.delete(url, { headers: this.headers }))
   }
 }
 
