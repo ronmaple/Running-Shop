@@ -7,11 +7,11 @@ import {
   CartItem as CartItemType,
   CartItemActions,
 } from './types'
-import CartItem from './CartItem'
-import CheckoutSummary from './CheckoutSummary'
+// import CartItem from './CartItem'
+import OrderSummary from './OrderSummary'
 import { useNavigate } from 'react-router-dom'
 
-const Cart = () => {
+const Checkout = () => {
   const navigate = useNavigate()
   const [cart, setCart] = useState<CartType>({
     id: '',
@@ -31,46 +31,8 @@ const Cart = () => {
     }
   }, [])
 
-  // debounce? use cartId Map for state?
-  // todo: loading
-  const handleCartItemAction = async (
-    itemId: string,
-    action: CartItemActions
-  ) => {
-    const target = cart.items.find((c) => c.id === itemId)
-    if (!target) {
-      throw new Error('Cannot find item')
-    }
-
-    let updatedCart: CartType
-    switch (action) {
-      case CartItemActions.increment:
-        const increasedQty = target.quantity + 1
-        updatedCart = await cartService.updateCartItem(cart.id, itemId, {
-          quantity: increasedQty,
-        })
-        break
-      case CartItemActions.decrement:
-        const decreasedQty = target.quantity - 1
-        updatedCart = await cartService.updateCartItem(cart.id, itemId, {
-          quantity: decreasedQty,
-        })
-        break
-      case CartItemActions.remove:
-        updatedCart = await cartService.removeCartItem(cart.id, itemId)
-        break
-      default:
-        throw new Error('Unknown Action')
-    }
-    setCart({
-      id: updatedCart.id,
-      items: updatedCart.items,
-      totalPrice: updatedCart.totalPrice,
-    })
-  }
-
-  const handleToggleCheckout = () => {
-    navigate('/order/checkout')
+  const handleHandleCheckout = () => {
+    navigate('/checkout')
   }
 
   return (
@@ -99,20 +61,20 @@ const Cart = () => {
               <Typography variant="h5" component="h5" gutterBottom>
                 Items
               </Typography>
-              {cart.items.map((item: CartItemType) => (
+              {/* {cart.items.map((item: CartItemType) => (
                 <CartItem
                   key={item.id}
                   handleAction={handleCartItemAction}
                   {...item}
                 />
-              ))}
+              ))} */}
             </Container>
           </Paper>
         </Grid>
         <Grid item xs={5}>
-          <CheckoutSummary {...cart} />
+          <OrderSummary {...cart} />
           <Box>
-            <Button onClick={handleToggleCheckout}>Checkout</Button>
+            <Button onClick={handleHandleCheckout}>Proceed</Button>
           </Box>
         </Grid>
       </Grid>
@@ -120,4 +82,4 @@ const Cart = () => {
   )
 }
 
-export { Cart }
+export { Checkout }
