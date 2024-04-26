@@ -19,10 +19,21 @@ import { ProtectedRoute } from './containers/ProtectedRoute'
 import { Cart } from './pages/Cart'
 import { Checkout } from './pages/Checkout'
 
+import { Elements } from '@stripe/react-stripe-js'
+import { loadStripe } from '@stripe/stripe-js'
+import { stripePublishableKey, stripeSecretKey } from './configs/env'
 // TODO add theme
 const defaultTheme = createTheme()
 
+const stripePromise = loadStripe(stripePublishableKey)
+
 function App() {
+  const options = {
+    // passing the client secret obtained from the server
+    // clientSecret: '{{CLIENT_SECRET}}',
+    // clientSecret: stripeSecretKey,
+    clientSecret: '${id}_secret_${secret}',
+  }
   return (
     <AuthProvider>
       <ThemeProvider theme={defaultTheme}>
@@ -36,7 +47,16 @@ function App() {
           <Route path="/register" element={<Register />} />
           <Route path="/about" element={<About />} />
           <Route path="/cart" element={<Cart />} />
-          <Route path="/order/checkout" element={<Checkout />} />
+
+          <Route
+            path="/order/checkout"
+            element={
+              // TODO: withStripe()
+              <Elements stripe={stripePromise} options={options}>
+                <Checkout />
+              </Elements>
+            }
+          />
 
           <Route
             path="/account"
