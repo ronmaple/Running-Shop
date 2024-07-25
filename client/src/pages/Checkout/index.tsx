@@ -13,6 +13,7 @@ import { useNavigate } from 'react-router-dom'
 import StripeCheckoutForm from '../../components/StripeCheckout'
 
 const Checkout = () => {
+  console.log('Checkout')
   const navigate = useNavigate()
   const [cart, setCart] = useState<CartType>({
     id: '',
@@ -40,7 +41,7 @@ const Checkout = () => {
     <Box maxHeight={500} p={5}>
       <Grid container spacing={1}>
         <Grid container item xs={7}>
-          <StripeCheckoutForm />
+          {/* <StripeCheckoutForm /> */}
           {/* <Paper
             elevation={0}
             sx={{

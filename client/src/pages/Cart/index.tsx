@@ -70,6 +70,7 @@ const Cart = () => {
   }
 
   const handleToggleCheckout = () => {
+    // console.log('handleToggleCheckout')
     navigate('/order/checkout')
   }
 

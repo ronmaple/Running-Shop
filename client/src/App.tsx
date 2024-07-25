@@ -31,8 +31,8 @@ function App() {
   const options = {
     // passing the client secret obtained from the server
     // clientSecret: '{{CLIENT_SECRET}}',
-    // clientSecret: stripeSecretKey,
-    clientSecret: '${id}_secret_${secret}',
+    clientSecret: stripeSecretKey,
+    // clientSecret: '${id}_secret_${secret}',
   }
   return (
     <AuthProvider>
