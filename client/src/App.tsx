@@ -18,6 +18,7 @@ import { AccountHome } from './pages/AccountHome'
 import { ProtectedRoute } from './containers/ProtectedRoute'
 import { Cart } from './pages/Cart'
 import { Checkout } from './pages/Checkout'
+import { Payment } from './pages/Checkout/Payment'
 
 // TODO add theme
 const defaultTheme = createTheme()
@@ -37,6 +38,7 @@ function App() {
           <Route path="/about" element={<About />} />
           <Route path="/cart" element={<Cart />} />
           <Route path="/order/checkout" element={<Checkout />} />
+          <Route path="/order/checkout/payment" element={<Payment />} />
 
           <Route
             path="/account"
