@@ -31,9 +31,10 @@ const CheckoutSummary = (props: CartProps) => {
       value: props.items.length ? formatPrice(props.totalPrice, true) : '-',
     },
   ]
+
   return (
     <TableContainer component={Paper}>
-      <Table sx={{ minWidth: 650 }} aria-label="simple table">
+      <Table sx={{ minWidth: 400 }} aria-label="simple table">
         <TableHead>
           <TableRow>
             <TableCell>
@@ -41,7 +42,7 @@ const CheckoutSummary = (props: CartProps) => {
                 Order Summary
               </Typography>
             </TableCell>
-            <TableCell align="right">filler</TableCell>
+            <TableCell align="right"></TableCell>
           </TableRow>
         </TableHead>
         <TableBody>

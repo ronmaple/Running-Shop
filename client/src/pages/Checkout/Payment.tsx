@@ -2,12 +2,17 @@ import { useEffect, useState } from 'react'
 import { Grid, Typography, Paper, Box, Button, Container } from '@mui/material'
 
 import cartService from '../../services/CartService'
-import { Cart as CartType } from './types'
+import {
+  Cart as CartType,
+  CartItem as CartItemType,
+  CartItemActions,
+} from './types'
+// import CartItem from './CartItem'
 import OrderSummary from './OrderSummary'
 import { useNavigate } from 'react-router-dom'
-import ShippingForm from './ShippingForm'
+import PaymentForm from './PaymentForm'
 
-const Checkout = () => {
+const Payment = () => {
   const navigate = useNavigate()
   const [cart, setCart] = useState<CartType>({
     id: '',
@@ -55,21 +60,18 @@ const Checkout = () => {
               }}
             >
               <Typography variant="h5" component="h5" gutterBottom>
-                Contact Information
+                Payment Method
               </Typography>
-              <ShippingForm />
+              <PaymentForm />
             </Container>
           </Paper>
         </Grid>
         <Grid item xs={5}>
           <OrderSummary {...cart} />
-          <Box>
-            <Button onClick={handleHandleCheckout}>Proceed</Button>
-          </Box>
         </Grid>
       </Grid>
     </Box>
   )
 }
 
-export { Checkout }
+export { Payment }
