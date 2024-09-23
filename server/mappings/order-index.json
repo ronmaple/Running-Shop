@@ -1,0 +1,14 @@
+{
+  "mappings": {
+    "properties": {
+      "attributes": {
+        "type": "object",
+        "properties": {
+          "lifetimeSpendings": {
+            "type": "float"
+          }
+        }
+      }
+    }
+  }
+}

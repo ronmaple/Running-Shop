@@ -40,11 +40,29 @@ services:
         soft: -1
         hard: -1
     volumes:
-      - esdata
+      - esdata:/usr/share/elasticsearch/data
     ports:
       - '9200:9200'
+    networks:
+      - elk
+
+  kibana:
+    image: docker.elastic.co/kibana/kibana:7.17.3
+    container_name: kibana
+    ports:
+      - 5601:5601
+    environment:
+      ELASTICSEARCH_HOSTS: http://elasticsearch:9200
+    depends_on:
+      - elasticsearch
+    networks:
+      - elk
 
 # 1 volume for 1 cluster
 volumes:
   esdata:
     driver: local
+
+networks:
+  elk:
+    driver: bridge  

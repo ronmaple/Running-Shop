@@ -1,0 +1,32 @@
+{
+  "mappings": {
+    "properties": {
+      "id": {
+        "type": "keyword"
+      },
+      "email": {
+        "type": "keyword"
+      },
+      "firstName": {
+        "type": "text"
+      },
+      "lastName": {
+        "type": "text"
+      },
+      "role": {
+        "type": "keyword"
+      },
+      "createdAt": {
+        "type": "date"
+      },
+      "attributes": {
+        "type": "object",
+        "properties": {
+          "favorites": {
+            "type": "text"
+          }
+        }
+      }
+    }
+  }
+}
